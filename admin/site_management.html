@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление Сайтом - Панель администратора</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .form-section {
+            @apply bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-8;
+        }
+        .form-section h3 {
+            @apply text-xl font-bold text-gray-800 mb-6 border-b border-gray-200 pb-4;
+        }
+        .form-section label {
+            @apply block mb-2 text-sm font-medium text-gray-700;
+        }
+        .form-section input, .form-section textarea {
+            @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5;
+        }
+        .form-section textarea {
+            @apply min-h-[100px];
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen bg-gray-200">
+        <!-- Sidebar -->
+        <div class="w-64 bg-gray-800 text-white flex flex-col">
+            <div class="px-6 py-4 bg-gray-900">
+                <h2 class="text-xl font-bold">Зеленый Контракт</h2>
+                <span class="text-sm text-gray-400">Админ-панель</span>
+            </div>
+            <nav id="sidebar-nav" class="flex-1 px-4 py-4 space-y-2">
+                <!-- Links will be populated by JS -->
+            </nav>
+            <div class="px-6 py-4 border-t border-gray-700">
+                <button onclick="logout()" class="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700 rounded-md w-full text-left">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Выйти
+                </button>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="flex justify-between items-center p-6 bg-white border-b-2 border-gray-200">
+                <h1 class="text-2xl font-bold text-gray-800">Управление контентом сайта</h1>
+                <button id="save-all-content" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
+                    Сохранить все изменения
+                </button>
+            </header>
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200 p-6">
+                <form id="siteContentForm">
+
+                    <!-- Hero Section -->
+                    <div class="form-section">
+                        <h3>Главный экран (Hero)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="hero_title">Главный заголовок</label>
+                                <input type="text" id="hero_title" data-key="hero_title">
+                            </div>
+                            <div>
+                                <label for="hero_subtitle">Подзаголовок</label>
+                                <input type="text" id="hero_subtitle" data-key="hero_subtitle">
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <label for="hero_description">Описание</label>
+                            <textarea id="hero_description" data-key="hero_description"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Contacts & Footer -->
+                    <div class="form-section">
+                        <h3>Контакты и подвал сайта</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                           <div>
+                                <label for="contact_phone">Контактный телефон</label>
+                                <input type="text" id="contact_phone" data-key="contact_phone">
+                            </div>
+                             <div>
+                                <label for="contact_email">Контактный Email</label>
+                                <input type="email" id="contact_email" data-key="contact_email">
+                            </div>
+                            <div>
+                                <label for="whatsapp_link">Ссылка на WhatsApp</label>
+                                <input type="url" id="whatsapp_link" data-key="whatsapp_link">
+                            </div>
+                            <div>
+                                <label for="telegram_link">Ссылка на Telegram канал</label>
+                                <input type="url" id="telegram_link" data-key="telegram_link">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- More sections will be added here -->
+
+                </form>
+            </main>
+        </div>
+    </div>
+    <script src="admin.js"></script>
+</body>
+</html>
