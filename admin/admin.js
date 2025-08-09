@@ -348,9 +348,37 @@ async function deleteOrder(id) {
 }
 
 
+// --- Sidebar ---
+function renderSidebar() {
+    const path = window.location.pathname;
+    const navContainer = document.getElementById('sidebar-nav');
+    if (!navContainer) return;
+
+    const navItems = [
+        { href: 'dashboard.html', icon: '<svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>', text: 'Дашборд' },
+        { href: 'orders.html', icon: '<svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>', text: 'Заявки' },
+        { href: 'catalog.html', icon: '<svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>', text: 'Каталог' },
+        { href: 'site_management.html', icon: '<svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>', text: 'Управление Сайтом' }
+    ];
+
+    let html = '';
+    navItems.forEach(item => {
+        const isActive = path.endsWith(item.href);
+        const activeClass = isActive ? 'bg-gray-700 text-gray-100' : 'text-gray-300 hover:bg-gray-700';
+        html += `<a href="${item.href}" class="flex items-center px-4 py-2 ${activeClass} rounded-md">${item.icon} ${item.text}</a>`;
+    });
+    navContainer.innerHTML = html;
+}
+
+
 // --- Event Listeners ---
 document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
+
+    // Render sidebar on all admin pages except login
+    if (!path.endsWith('index.html') && !path.endsWith('/admin/')) {
+        renderSidebar();
+    }
 
     if (path.endsWith('index.html') || path.endsWith('/admin/')) {
         const loginForm = document.querySelector('form');
@@ -383,5 +411,59 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('closeOrderModalButton').addEventListener('click', closeOrderDetailsModal);
         document.getElementById('closeOrderModalButtonBottom').addEventListener('click', closeOrderDetailsModal);
         document.getElementById('saveOrderStatusButton').addEventListener('click', updateOrderStatus);
+    } else if (path.endsWith('site_management.html')) {
+        checkAuth();
+        loadSiteContent();
+        document.getElementById('save-all-content').addEventListener('click', saveSiteContent);
     }
 });
+
+// --- Site Content Management ---
+
+async function loadSiteContent() {
+    console.log("Загрузка контента сайта...");
+    const { data, error } = await _supabase.from('site_content').select('*');
+
+    if (error) {
+        console.error('Ошибка загрузки контента сайта:', error);
+        alert('Не удалось загрузить данные для редактирования.');
+        return;
+    }
+
+    data.forEach(item => {
+        const inputElement = document.getElementById(item.key);
+        if (inputElement) {
+            inputElement.value = item.value;
+        }
+    });
+    console.log("Контент сайта успешно загружен в форму.");
+}
+
+async function saveSiteContent(event) {
+    event.preventDefault();
+    console.log("Сохранение контента сайта...");
+    const form = document.getElementById('siteContentForm');
+    const inputs = form.querySelectorAll('[data-key]');
+
+    const dataToUpsert = [];
+    inputs.forEach(input => {
+        dataToUpsert.push({
+            key: input.dataset.key,
+            value: input.value
+        });
+    });
+
+    if (dataToUpsert.length === 0) {
+        alert("Нет данных для сохранения.");
+        return;
+    }
+
+    const { error } = await _supabase.from('site_content').upsert(dataToUpsert, { onConflict: 'key' });
+
+    if (error) {
+        console.error('Ошибка сохранения контента:', error);
+        alert('Ошибка при сохранении: ' + error.message);
+    } else {
+        alert('Контент сайта успешно обновлен!');
+    }
+}
