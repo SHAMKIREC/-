@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowLeft, ArrowRight, Bike, Check, ChevronDown, Clock3, Compass, Heart, LayoutDashboard, MapPin, Menu, Minus, Package, Plus, Search, ShieldCheck, ShoppingBag, SlidersHorizontal, Store, Truck, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Bike, Check, ChevronDown, Clock3, Compass, Heart, LayoutDashboard, MapPin, Menu, Minus, Package, Plus, Search, ShieldCheck, ShoppingBag, SlidersHorizontal, Store, Truck, UserRound, X } from 'lucide-react';
 import './index.css';
 import Portal from './Portal';
 import { createClient } from '@supabase/supabase-js';
@@ -47,6 +47,7 @@ export default function App(){
   const [peak,setPeak]=useState(false);
   const [message,setMessage]=useState('');
   const [navOpen,setNavOpen]=useState(false);
+  const [profileOpen,setProfileOpen]=useState(false);
   const [adminMerchant,setAdminMerchant]=useState(1);
   const [merchantLead,setMerchantLead]=useState({name:'',contact:''});
   const [leads,setLeads]=useState<string[]>([]);
@@ -69,7 +70,7 @@ export default function App(){
   function switchMerchant(){if(confirmMerchant===null)return;setCart({});setCartMerchant(null);const next=confirmMerchant;setConfirmMerchant(null);setSelected(next);setCategory('Все');setPage('merchant');window.scrollTo({top:0,behavior:'smooth'});}
   function createOrder(){if(count===0){inform('Добавьте товары в корзину');return;}if(mode==='delivery'&&!address.trim()){inform('Укажите адрес доставки');return;}if(cartMerchant===null)return;const record:Order={id:Date.now(),merchantId:cartMerchant,items:products.filter(p=>(cart[p.id]||0)>0).map(p=>p.name+' × '+cart[p.id]).join(', '),sum,delivery,mode,status:'Новый',address:mode==='pickup'?'Самовывоз':address,distance};setOrders(old=>[record,...old]);setCart({});setCartMerchant(null);setPage('orders');inform('Тестовый заказ создан. Оплата не списана.');}
   function updateOrder(id:number,status:string){setOrders(old=>old.map(o=>o.id===id?{...o,status}:o));inform('Статус тестового заказа обновлён');}
-  function navigate(destination:string){setPage(destination);setNavOpen(false);window.scrollTo({top:0,behavior:'smooth'});}
+  function navigate(destination:string){setPage(destination);setNavOpen(false);setProfileOpen(false);window.scrollTo({top:0,behavior:'smooth'});}
   const nav=[{id:'home',label:'Заведения'},{id:'orders',label:'Мои заказы'},{id:'partner',label:'Для бизнеса'},{id:'courier',label:'Курьерам'},{id:'account',label:'Личный кабинет'},{id:'admin',label:isStaff?'Управление':'Демо администратора'}];
   const merchantCategories=['Все','Стритфуд','Мангал','Пекарня'];
   const filteredProducts=useMemo(()=>merchantProducts,[selected,category]);
@@ -80,6 +81,7 @@ export default function App(){
       <div className="header-location"><MapPin size={18}/><div>Саратов <small>3-я Дачная · пилотный район</small></div></div>
       <nav className="desktop-navigation">{nav.map(item=><button key={item.id} className={page===item.id?'on':''} onClick={()=>navigate(item.id)}>{item.label}</button>)}</nav>
       <button className="header-cart" onClick={()=>navigate('cart')}><ShoppingBag size={19}/><span>Корзина</span>{count>0&&<b>{count}</b>}</button>
+      <div className="profile-menu"><button type="button" className="profile-trigger" aria-label="Профиль: вход и регистрация" aria-expanded={profileOpen} onClick={()=>setProfileOpen(v=>!v)}><UserRound size={22}/></button>{profileOpen&&<div className="profile-dropdown"><b>Вход и регистрация</b><p>Выберите, как будете пользоваться «Рядом»</p><button onClick={()=>navigate('account')}><UserRound size={18}/> Покупатель</button><button onClick={()=>navigate('partner')}><Store size={18}/> Предприниматель</button><button onClick={()=>navigate('courier')}><Bike size={18}/> Курьер</button><div className="profile-divider"/><button onClick={()=>navigate('admin')}><ShieldCheck size={18}/> Владелец платформы</button></div>}</div>
       <button className="mobile-toggle" aria-label="Меню" onClick={()=>setNavOpen(!navOpen)}>{navOpen?<X/>:<Menu/>}</button>
     </div></header>
     {navOpen&&<div className="mobile-navigation">{nav.map(item=><button key={item.id} onClick={()=>navigate(item.id)}>{item.label}</button>)}</div>}
