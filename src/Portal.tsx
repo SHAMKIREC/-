@@ -8,7 +8,7 @@ type Order = { id: string; merchant_id: string; state: string; fulfillment: stri
 const url = import.meta.env.VITE_SUPABASE_URL || 'https://yvchkbpegunclzqweunj.supabase.co';
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_XpsN4NmSl2vWEfrY4K6zdQ_-2on8pun';
 const db: SupabaseClient | null = url && key ? createClient(url, key, {auth:{flowType:'pkce',detectSessionInUrl:true,autoRefreshToken:true,persistSession:true}}) : null;
-const SITE_URL = 'https://app-5dq9by.v2.appdeploy.ai/';
+const SITE_URL = new URL(import.meta.env.BASE_URL, window.location.origin).href;
 const rub = (v: number) => (v / 100).toLocaleString('ru-RU', { style: 'currency', currency: 'RUB' });
 const labels: Record<string,string> = { new:'Новый', accepted:'Принят', preparing:'Готовится', ready:'Готов к выдаче', assigned:'Назначен курьер', picked_up:'В пути', delivered:'Выполнен', cancelled:'Отменён' };
 
