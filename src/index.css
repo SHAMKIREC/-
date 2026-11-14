@@ -160,3 +160,11 @@ body,.app{background:var(--ryadom-paper)}
 .detail-quantity button:disabled{opacity:.35;cursor:not-allowed}
 .detail-quantity b{min-width:24px;text-align:center;font-size:18px}
 @media(max-width:600px){.product-detail .detail-bottom{display:flex;flex-wrap:wrap;align-items:end;gap:14px}.product-detail .detail-bottom .main-button{flex:1;min-width:170px}}
+
+/* Unified owner demo navigation */
+.owner-role-switch{margin-top:18px}
+.owner-role-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}
+.owner-role-buttons button{min-height:48px;justify-content:center;padding:12px 14px;font-size:14px}
+.owner-demo-info{margin-top:18px}
+.owner-demo-info p{margin:10px 0 16px}
+@media(max-width:420px){.owner-role-buttons{grid-template-columns:1fr 1fr}.owner-role-buttons button{font-size:13px;padding:10px 6px}}
