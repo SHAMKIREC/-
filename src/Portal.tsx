@@ -27,6 +27,7 @@ export default function Portal({ section }: { section: 'account' | 'partner' | '
   const [busy, setBusy] = useState(false);
   const [showPassword,setShowPassword]=useState(false);
   const [resetMode,setResetMode]=useState(false);
+  const [passwordRecovery,setPasswordRecovery]=useState(false);
   const role: Role | null = section === 'partner' ? 'merchant' : section === 'courier' ? 'courier' : section === 'admin' ? 'admin' : 'customer';
   const allowed = section === 'account' || roles.includes(role!) || (section === 'admin' && roles.includes('dispatcher'));
 
@@ -34,7 +35,7 @@ export default function Portal({ section }: { section: 'account' | 'partner' | '
     if (!db) { setLoading(false); return; }
     let active = true;
     db.auth.getUser().then(({ data }) => { if (active) { setUser(data.user); setLoading(false); } });
-    const { data: listener } = db.auth.onAuthStateChange((_event, session) => { if (active) setUser(session?.user ?? null); });
+    const { data: listener } = db.auth.onAuthStateChange((event, session) => { if (active) { setUser(session?.user ?? null); if(event === 'PASSWORD_RECOVERY') { setPasswordRecovery(true); setNotice('Укажите новый пароль для восстановления доступа.'); } } });
     return () => { active = false; listener.subscription.unsubscribe(); };
   }, []);
   useEffect(() => {
@@ -72,6 +73,14 @@ export default function Portal({ section }: { section: 'account' | 'partner' | '
     finally { setBusy(false); }
   }
   async function resetPassword(e: React.FormEvent) {e.preventDefault();if(!db||busy)return;setBusy(true);setNotice('');const {error}=await db.auth.resetPasswordForEmail(email.trim(),{redirectTo:SITE_URL});setNotice(error?error.message:'Если адрес зарегистрирован, на него отправлена ссылка восстановления.');setBusy(false);}
+  async function updatePassword(e: React.FormEvent) {
+    e.preventDefault(); if (!db || busy) return;
+    if(password.length < 10){setNotice('Новый пароль должен содержать минимум 10 символов');return;}
+    setBusy(true);const {error}=await db.auth.updateUser({password});
+    setNotice(error ? error.message : 'Пароль изменён. Теперь можно пользоваться кабинетом.');
+    if(!error){setPasswordRecovery(false);setPassword('');}
+    setBusy(false);
+  }
   async function applyMerchant(e: React.FormEvent) {
     e.preventDefault();
     if (!db || !user || busy) return;
@@ -98,7 +107,8 @@ export default function Portal({ section }: { section: 'account' | 'partner' | '
 </div>
     {!db ? <div className="panel portal-message"><LockKeyhole size={30}/><h3>Подключение сервера завершается</h3><p>Вход будет доступен после настройки защищённого подключения к базе данных. Временный вход без проверки прав отключён.</p></div>
     : loading ? <div className="panel">Загружаем профиль…</div>
-    : !user ? <div className="panel portal-auth"><h3>{resetMode ? 'Восстановить пароль' : register ? 'Создать аккаунт' : 'Войти в кабинет'}</h3>
+    : passwordRecovery ? <div className="panel portal-auth"><h3>Новый пароль</h3><p>Придумайте новый пароль длиной не менее 10 символов.</p><form onSubmit={updatePassword}><label className="field">Новый пароль<input required type="password" minLength={10} value={password} onChange={e=>setPassword(e.target.value)} autoComplete="new-password"/></label><button className="main-button stretch" disabled={busy}>Сохранить пароль</button></form></div>
+    : !user ? <div className="panel portal-auth"><h3>{resetMode ? 'Восстановить пароль' : register ? 'Создать аккаунт' : 'Войти в кабинет'}</h3><p>{section === 'partner' ? 'Сначала создайте обычный аккаунт, затем отправьте заявку на подключение заведения. После проверки откроется кабинет владельца.' : section === 'courier' ? 'Сначала зарегистрируйтесь. Доступ к доставкам появится после проверки и назначения роли курьера администратором.' : section === 'admin' ? 'Для сотрудников платформы. Самостоятельно получить права администратора через регистрацию нельзя.' : 'Один аккаунт для покупок и отслеживания заказов.'}</p>
         <form onSubmit={resetMode ? resetPassword : authenticate}>
           {register && !resetMode && <label className="field">Имя<input required minLength={2} maxLength={80} value={name} onChange={e=>setName(e.target.value)} autoComplete="name"/></label>}
           <label className="field">Электронная почта<input required type="email" value={email} onChange={e=>setEmail(e.target.value)} autoComplete="email"/></label>
