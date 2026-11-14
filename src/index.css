@@ -9,27 +9,78 @@
 @media(max-width:850px){.desktop-navigation{display:none}.header-cart{margin-left:auto}.mobile-toggle{display:block;background:none;border:0}.mobile-navigation{display:flex;flex-direction:column;position:sticky;top:76px;z-index:19;background:white;padding:10px 23px;border-bottom:1px solid #e8edf3}.mobile-navigation button{border:0;background:none;text-align:left;padding:12px;font-size:13px;font-weight:700}.hero{grid-template-columns:1fr}.hero-photo{min-height:220px}.hero-copy{padding:42px}.merchant-grid{grid-template-columns:repeat(2,1fr)}.product-grid{grid-template-columns:repeat(2,1fr)}.dish-search-list{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.wrap{width:calc(100% - 28px)}.header-inner{height:66px}.brand{font-size:23px}.brand-mark{height:34px;width:34px}.header-cart span{display:none}.mobile-navigation{top:66px}.hero{margin-top:14px;border-radius:18px}.hero-copy{padding:35px 24px}.hero h1{font-size:40px;letter-spacing:-1.7px}.hero p{font-size:12px}.hero-metrics{gap:13px;margin-top:30px}.hero-metrics b{font-size:15px}.hero-metrics span{font-size:9px}.hero-photo{min-height:190px}.hero-picture-label{font-size:10px;right:10px;bottom:10px;padding:9px}.market-sectors{padding:17px 0}.sector{padding:10px 12px;font-size:10px}.shop-section{padding:24px 0}.section-heading{display:block}.section-heading h2{font-size:27px}.search-bar{width:100%;margin-top:18px}.merchant-grid{grid-template-columns:1fr}.merchant-cover{height:205px}.merchant-card-content{padding:17px}.merchant-card-content>p{min-height:0}.merchant-address{min-height:0}.merchant-footer{margin-top:10px}.dish-search-list{grid-template-columns:1fr}.why{grid-template-columns:1fr;gap:8px;margin:20px 0 36px}.why>div{padding:16px}.why b{margin:8px 0}.cta{padding:27px 24px;margin:20px 0 55px}.cta h2{font-size:29px}.cta>svg{display:none}.inner,.merchant-view{padding:28px 0 80px}.inner h1{font-size:37px}.merchant-hero{min-height:250px}.merchant-hero-info{padding:54px 21px 27px}.merchant-hero h1{font-size:33px}.merchant-hero-info>div:last-child{font-size:10px}.menu-heading{margin-top:27px}.product-grid{grid-template-columns:repeat(2,1fr);gap:10px}.product>img{height:125px}.product-text{padding:12px}.product h3{font-size:13px;min-height:34px}.product p{font-size:10px;min-height:39px}.product-bottom>strong{font-size:14px}.quantity{gap:4px}.quantity button{height:28px;width:28px}.two-columns{grid-template-columns:1fr}.panel{padding:18px}.cart-line{gap:7px;flex-wrap:wrap}.cart-line>img{width:50px;height:50px}.cart-line>b:last-child{font-size:11px}.stats{grid-template-columns:repeat(2,1fr);gap:9px}.stats>div{padding:14px}.stats strong{font-size:22px}.footer-grid{grid-template-columns:1fr 1fr;gap:20px}.footer-grid>div:first-child{grid-column:span 2}.sticky-cart{left:14px;right:14px;bottom:14px;justify-content:center}.toast{left:14px;right:14px;transform:none}.hero-actions{gap:12px}}
 
-/* Layout hardening: small screens, long names, safe areas */
-html,body,#root{min-width:0;max-width:100%}
-.app,.wrap,main,section,article,.panel,.merchant-card,.product{min-width:0}
-img{max-width:100%}
-.header-inner,.merchant-name,.product-bottom,.cart-line,.order-card,.admin-line{min-width:0}
-.merchant-name h3,.merchant-card-content p,.merchant-address,.product h3,.product p,.cart-line .flex-grow,.order-card p{overflow-wrap:anywhere}
-.two-columns>*,.merchant-grid>*,.product-grid>*,.footer-grid>*{min-width:0}
-input,textarea,select{max-width:100%}
-button{touch-action:manipulation}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #356fe0;outline-offset:2px}
+/* Unified custom dropdowns and mobile portal layout */
+:root{color-scheme:light}
+select,option{color:#19263e;background:#fff;font-family:Manrope,Arial,sans-serif}
+.field select{appearance:none;-webkit-appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2319263e' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 16px center;padding-right:44px}
+.portal{max-width:920px;margin:0 auto}
+.portal-title h1{overflow-wrap:anywhere}
+.portal-auth{max-width:490px;margin:0 auto 28px}
+.portal-auth h3,.portal-message h3{font-size:22px}
+.portal-auth p,.portal-message p{font-size:13px;color:#7b8799;line-height:1.7}
+.portal-link{border:0;background:none;color:#e76543;padding:15px 0;font-weight:800}
+.portal-message{text-align:center;padding:50px 25px}
+.portal-message svg{color:#f36b47}
+.portal-profile{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.portal-profile>div{display:flex;align-items:center;gap:12px;min-width:0;overflow-wrap:anywhere}
+.portal-profile svg{flex-shrink:0;color:#ed6946}
+.portal-profile small,.portal-list small,.portal-order small{display:block;margin-top:5px;color:#8490a1;font-size:11px;line-height:1.6}
+.portal-list,.portal-order{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:17px 0;border-bottom:1px solid #edf0f4}
+.portal-list>div,.portal-order>div:first-child{flex:1;min-width:0;overflow-wrap:anywhere}
+.portal-list svg{color:#ef6b49;flex-shrink:0}
+.portal-actions{display:flex;gap:8px;flex-wrap:wrap}
+.portal-actions button{display:inline-flex;align-items:center;gap:5px;border:0;border-radius:9px;background:#19263e;color:white;padding:10px 12px;font-size:12px;font-weight:800}
+.portal-notice{background:#fff0df;border-radius:12px;padding:15px;color:#83572c}
 @media(max-width:600px){
- .hero-metrics{flex-wrap:wrap}
- .product-bottom{flex-wrap:wrap;gap:8px}
- .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .merchant-grid,.two-columns,.dish-search-list{grid-template-columns:minmax(0,1fr)}
- .merchant-footer{flex-wrap:wrap}
- .cart-line .flex-grow{min-width:110px}
- .cart-line>b:last-child{margin-left:auto}
- .sticky-cart{bottom:max(14px,env(safe-area-inset-bottom))}
- .toast{bottom:max(14px,env(safe-area-inset-bottom));max-width:calc(100vw - 28px)}
- .modal{width:min(100%,450px);max-height:calc(100dvh - 30px);overflow:auto}
- .cta{display:none}
+  .wrap{width:calc(100% - 32px)}
+  .app,.wrap,main{max-width:100%;min-width:0}
+  .footer-grid{grid-template-columns:1fr;gap:22px;padding:36px 0}
+  .footer-grid>div:first-child{grid-column:auto}
+  .footer-grid p{overflow-wrap:anywhere}
+  .footer-grid>div{min-width:0}
+  .header-inner{gap:12px}
+  .brand{min-width:0;gap:8px}
+  .brand small{font-size:7px;letter-spacing:.8px}
+  .header-cart{padding:11px 12px}
+  .product-grid{gap:12px}
+  .product{min-width:0}
+  .product-text{min-width:0}
+  .product h3{overflow-wrap:anywhere}
+  .portal-profile{align-items:flex-start}
+  .portal-order{align-items:flex-start;flex-direction:column}
+  .portal-actions{width:100%}
+  .portal-actions button{min-height:42px}
+  .panel{min-width:0}
+  .modal{max-width:100%;width:100%;max-height:calc(100dvh - 35px);overflow:auto}
+  .modal>div{flex-wrap:wrap}
+  .mobile-navigation{box-shadow:0 15px 30px #14203715;border-radius:0 0 16px 16px}
+  .mobile-navigation button{border-bottom:1px solid #edf0f4}
 }
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Mobile authentication layout and accessibility */
+.portal-auth{width:100%;box-sizing:border-box}
+.portal-auth .field{display:block;min-width:0}
+.portal-auth .field input{width:100%;min-width:0;box-sizing:border-box}
+.portal-auth .field input:focus{outline:2px solid #e76d4e;outline-offset:2px}
+.portal-auth .field input:-webkit-autofill{-webkit-text-fill-color:#19263e;box-shadow:0 0 0 100px #fff inset}
+.portal-links{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.password-row{display:flex;align-items:stretch;position:relative;min-width:0}
+.password-row input{padding-right:95px!important}
+.password-row button{position:absolute;right:9px;top:50%;transform:translateY(-50%);background:#f1f4f8;border:0;border-radius:9px;padding:9px 10px;color:#26334a;font-size:12px;font-weight:700}
+@media(max-width:600px){.portal{padding-top:28px}.portal-title h1{font-size:clamp(30px,9vw,42px);line-height:1.1;margin:12px 0 24px}.portal-title .eyebrow{font-size:10px}.portal-auth{padding:20px 16px;margin-bottom:20px;border-radius:18px}.portal-auth h3{font-size:22px;line-height:1.2;margin:0 0 22px}.portal-auth .field{font-size:12px;margin-bottom:16px}.portal-auth .field input{font-size:16px;min-height:52px;padding:13px 14px}.portal-auth .main-button{min-height:54px;font-size:14px}.portal-links{gap:0}.portal-link{font-size:12px;padding:13px 3px}.portal-notice{font-size:12px;line-height:1.5}.footer-grid{padding:26px 0}}
+/* Clean customer-facing navigation and merchant payment section */
+.brand small{display:none}
+.footer-grid{grid-template-columns:1.3fr 1fr 1fr}
+.payment-heading{display:flex;align-items:flex-start;gap:12px;margin-bottom:20px}
+.payment-heading svg{color:#f16a46;flex-shrink:0}
+.payment-heading h3{font-size:20px;margin:0 0 5px}
+.payment-heading p{font-size:12px;color:#8490a1;margin:0}
+.payment-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.payment-options>div{background:#f7f8fa;border:1px solid #e9edf2;border-radius:13px;padding:17px;min-width:0}
+.payment-options svg{color:#f16a46}
+.payment-options b{display:block;font-size:13px;margin:10px 0}
+.payment-options p{font-size:11px;line-height:1.7;color:#637083}
+.payment-options span{font-size:10px;font-weight:800;color:#e26948}
+.payment-notice{display:flex;align-items:flex-start;gap:10px;margin-top:17px;padding:14px;background:#fff4ed;border-radius:10px;color:#845943;font-size:11px;line-height:1.7}
+.payment-notice svg{flex-shrink:0}
+@media(max-width:600px){.payment-options{grid-template-columns:1fr}.payment-options>div{padding:15px}.footer-grid{grid-template-columns:1fr 1fr}.footer-grid>div:first-child{grid-column:span 2}.footer-grid>div{min-width:0}.footer-grid button{min-height:32px}.brand{letter-spacing:-1.2px}}
