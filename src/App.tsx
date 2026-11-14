@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, Bike, Check, ChevronDown, Clock3, Compass, Heart
 import './index.css';
 import Portal from './Portal';
 import NearbyMap from './NearbyMap';
+import OwnerWorkshop from './OwnerWorkshop';
 import { createClient } from '@supabase/supabase-js';
 const authClient = createClient('https://yvchkbpegunclzqweunj.supabase.co','sb_publishable_XpsN4NmSl2vWEfrY4K6zdQ_-2on8pun');
 
@@ -67,10 +68,10 @@ export default function App(){
   function openMerchant(id:number){if(cartMerchant!==null&&cartMerchant!==id&&count>0){setConfirmMerchant(id);return;}setSelected(id);setCategory('Все');setPage('merchant');window.scrollTo({top:0,behavior:'smooth'});}
   function addProduct(id:number,delta:number){const p=products.find(item=>item.id===id);if(!p)return;if(cartMerchant!==null&&cartMerchant!==p.merchantId&&count>0){setConfirmMerchant(p.merchantId);return;}setCartMerchant(p.merchantId);setCart(old=>({...old,[id]:Math.min(99,Math.max(0,(old[id]||0)+delta))}));}
   function switchMerchant(){if(confirmMerchant===null)return;setCart({});setCartMerchant(null);const next=confirmMerchant;setConfirmMerchant(null);setSelected(next);setCategory('Все');setPage('merchant');window.scrollTo({top:0,behavior:'smooth'});}
-  function createOrder(){if(count===0){inform('Добавьте товары в корзину');return;}if(mode==='delivery'&&!address.trim()){inform('Укажите адрес доставки');return;}if(cartMerchant===null)return;const record:Order={id:Date.now(),merchantId:cartMerchant,items:products.filter(p=>(cart[p.id]||0)>0).map(p=>p.name+' × '+cart[p.id]).join(', '),sum,delivery,mode,status:'Новый',address:mode==='pickup'?'Самовывоз':address,distance:0};setOrders(old=>[record,...old]);setCart({});setCartMerchant(null);setPage('orders');inform('Заявка сохранена на этом устройстве. Продавцу она не отправлена.');}
+  function createOrder(){if(count===0){inform('Добавьте товары в корзину');return;}if(mode==='delivery'&&!address.trim()){inform('Укажите адрес доставки');return;}if(cartMerchant===null)return;const record:Order={id:Date.now(),merchantId:cartMerchant,items:products.filter(p=>(cart[p.id]||0)>0).map(p=>p.name+' × '+cart[p.id]).join(', '),sum,delivery,mode,status:'Новый',address:mode==='pickup'?'Самовывоз':address,distance:0};setOrders(old=>[record,...old]);setCart({});setCartMerchant(null);setPage('orders');inform('Заказ сохранён для проверки. Перейдите в «Проверка заказа», чтобы пройти весь цикл.');}
   function updateOrder(id:number,status:string){setOrders(old=>old.map(o=>o.id===id?{...o,status}:o));inform('Статус обновлён на этом устройстве');}
   function navigate(destination:string){setPage(destination);setNavOpen(false);setProfileOpen(false);window.scrollTo({top:0,behavior:'smooth'});}
-  const nav=[{id:'home',label:'Заведения'},{id:'map',label:'Карта'},{id:'orders',label:'Мои заказы'},{id:'partner',label:'Для бизнеса'},{id:'courier',label:'Курьерам'},{id:'account',label:'Личный кабинет'},...(isStaff?[{id:'admin',label:'Управление'}]:[])];
+  const nav=[{id:'home',label:'Заведения'},{id:'map',label:'Карта'},{id:'orders',label:'Мои заказы'},{id:'workshop',label:'Проверка заказа'},{id:'partner',label:'Для бизнеса'},{id:'courier',label:'Курьерам'},{id:'account',label:'Личный кабинет'},...(isStaff?[{id:'admin',label:'Управление'}]:[])];
   const merchantCategories=['Все','Стритфуд','Мангал','Пекарня'];
   const filteredProducts=useMemo(()=>merchantProducts,[selected,category]);
   return <div className="app">
@@ -97,6 +98,7 @@ export default function App(){
       <section className="why"><div><Truck size={22}/><b>Самовывоз или доставка</b><p>Вы сами решаете, как получать заказ.</p></div><div><MapPin size={22}/><b>Знакомые места</b><p>Витрина конкретного заведения, а не общий список блюд.</p></div><div><Heart size={22}/><b>Локальный бизнес</b><p>Для заведений вход и самовывоз бесплатны.</p></div></section>
       
     </>}
+    {page==='workshop'&&<OwnerWorkshop onNavigate={navigate}/>}
     {page==='map'&&<NearbyMap shops={merchants} onSelect={openMerchant}/>}
     {page==='merchant'&&current&&<>
       <section className="merchant-view"><button className="back" onClick={()=>navigate('home')}><ArrowLeft size={17}/> Все заведения</button><div className="merchant-hero"><img src={current.cover} alt={'Иллюстрация кухни заведения '+current.name}/><div className="merchant-hero-info"><h1>{current.name}</h1><p>{current.description}</p><div><MapPin size={16}/>{current.address}</div></div></div><div className="merchant-note">Это пример витрины. Заведение пока не принимает заказы через «Рядом».</div><div className="section-heading menu-heading"><div><span className="eyebrow">МЕНЮ ЗАВЕДЕНИЯ</span><h2>Выберите, что нравится</h2></div><button className="outline-button" onClick={()=>navigate('cart')}><ShoppingBag size={17}/> Корзина · {count}</button></div><div className="filter-bar">{['Все',...Array.from(new Set(products.filter(p=>p.merchantId===current.id).map(p=>p.category)))].map(c=><button className={category===c?'chosen':''} key={c} onClick={()=>setCategory(c)}>{c}</button>)}</div><div className="product-grid compact-menu">{filteredProducts.map(p=><button type="button" className="product compact-product" key={p.id} onClick={()=>openProduct(p.id)} aria-label={'Подробнее: '+p.name}><img src={p.image} loading="lazy" alt={'Фото блюда: '+p.name}/><div className="compact-product-caption"><h3>{p.name}</h3><div className="product-price-row"><b>{money(p.price)}</b><span>Подробнее <ArrowRight size={15}/></span></div></div></button>)}</div></section>
