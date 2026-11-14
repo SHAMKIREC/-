@@ -145,3 +145,9 @@ body,.app{background:var(--ryadom-paper)}
   .compact-product>img{height:145px}
 }
 @media(max-width:390px){.merchant-cover{height:115px}.merchant-name h3{font-size:15px}}
+
+/* Clear pricing on mobile product tiles */
+.product-price-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;flex-wrap:wrap}
+.product-price-row>b{font-size:19px;color:#17283f;font-weight:800;white-space:nowrap}
+.product-price-row>span{display:inline-flex;align-items:center;gap:3px}
+@media(max-width:750px){.product-price-row>b{font-size:17px}.compact-product-caption{padding:12px}.product-price-row>span{font-size:12px}}
