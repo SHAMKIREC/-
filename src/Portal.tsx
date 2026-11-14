@@ -28,6 +28,7 @@ export default function Portal({ section }: { section: 'account' | 'partner' | '
   const [showPassword,setShowPassword]=useState(false);
   const [resetMode,setResetMode]=useState(false);
   const [passwordRecovery,setPasswordRecovery]=useState(false);
+  const [demoPreview,setDemoPreview]=useState(false);
   const role: Role | null = section === 'partner' ? 'merchant' : section === 'courier' ? 'courier' : section === 'admin' ? 'admin' : 'customer';
   const allowed = section === 'account' || roles.includes(role!) || (section === 'admin' && roles.includes('dispatcher'));
 
@@ -105,6 +106,8 @@ export default function Portal({ section }: { section: 'account' | 'partner' | '
     <div className="portal-title"><span className="eyebrow">{section === 'admin' ? 'АДМИНИСТРИРОВАНИЕ' : section === 'courier' ? 'ДОСТАВКА' : section === 'partner' ? 'ДЛЯ ЗАВЕДЕНИЙ' : 'ЛИЧНЫЙ КАБИНЕТ'}</span>
       <h1>{section === 'admin' ? 'Управление платформой' : section === 'courier' ? 'Кабинет курьера' : section === 'partner' ? 'Кабинет заведения' : 'Ваш профиль'}</h1>
 </div>
+    <div className="panel demo-role-panel"><div><b>Тестовый просмотр кабинета</b><p>Можно проверить интерфейс без регистрации. Это демонстрация: доступ к настоящим заказам, базе и правам пользователей не предоставляется.</p></div><button type="button" className="secondary-button" onClick={()=>setDemoPreview(v=>!v)}>{demoPreview?'Закрыть демо':'Открыть демо'}</button></div>
+    {demoPreview && <div className="panel demo-role-panel"><h3>{section==='admin'?'Демо администратора':section==='courier'?'Демо курьера':section==='partner'?'Демо заведения':'Демо покупателя'}</h3><p>{section==='admin'?'Администратор проверяет заявки заведений и курьеров, управляет заказами и правами доступа.':section==='courier'?'Курьер видит назначенные доставки, адрес получения и статусы выполнения.':section==='partner'?'Заведение управляет своим меню, ценами, наличием и входящими заказами.':'Покупатель выбирает блюда, меняет количество и оформляет заказ.'}</p><div className="portal-list"><Package size={20}/><div><b>Тестовый сценарий</b><small>{section==='admin'?'Проверка заявки → одобрение → назначение курьера':section==='courier'?'Назначен → забрал → доставил':section==='partner'?'Новый заказ → принят → готовится → готово':'Корзина → самовывоз или доставка → отслеживание'}</small></div></div><p>Демо не создаёт пользователей и не изменяет данные сервера.</p></div>}
     {!db ? <div className="panel portal-message"><LockKeyhole size={30}/><h3>Подключение сервера завершается</h3><p>Вход будет доступен после настройки защищённого подключения к базе данных. Временный вход без проверки прав отключён.</p></div>
     : loading ? <div className="panel">Загружаем профиль…</div>
     : passwordRecovery ? <div className="panel portal-auth"><h3>Новый пароль</h3><p>Придумайте новый пароль длиной не менее 10 символов.</p><form onSubmit={updatePassword}><label className="field">Новый пароль<input required type="password" minLength={10} value={password} onChange={e=>setPassword(e.target.value)} autoComplete="new-password"/></label><button className="main-button stretch" disabled={busy}>Сохранить пароль</button></form></div>
