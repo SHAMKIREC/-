@@ -8,3 +8,28 @@
 @media(max-width:1080px){.header-location{display:none}.desktop-navigation{gap:11px}.hero-copy{padding:55px 35px}.hero h1{font-size:49px}}
 @media(max-width:850px){.desktop-navigation{display:none}.header-cart{margin-left:auto}.mobile-toggle{display:block;background:none;border:0}.mobile-navigation{display:flex;flex-direction:column;position:sticky;top:76px;z-index:19;background:white;padding:10px 23px;border-bottom:1px solid #e8edf3}.mobile-navigation button{border:0;background:none;text-align:left;padding:12px;font-size:13px;font-weight:700}.hero{grid-template-columns:1fr}.hero-photo{min-height:220px}.hero-copy{padding:42px}.merchant-grid{grid-template-columns:repeat(2,1fr)}.product-grid{grid-template-columns:repeat(2,1fr)}.dish-search-list{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.wrap{width:calc(100% - 28px)}.header-inner{height:66px}.brand{font-size:23px}.brand-mark{height:34px;width:34px}.header-cart span{display:none}.mobile-navigation{top:66px}.hero{margin-top:14px;border-radius:18px}.hero-copy{padding:35px 24px}.hero h1{font-size:40px;letter-spacing:-1.7px}.hero p{font-size:12px}.hero-metrics{gap:13px;margin-top:30px}.hero-metrics b{font-size:15px}.hero-metrics span{font-size:9px}.hero-photo{min-height:190px}.hero-picture-label{font-size:10px;right:10px;bottom:10px;padding:9px}.market-sectors{padding:17px 0}.sector{padding:10px 12px;font-size:10px}.shop-section{padding:24px 0}.section-heading{display:block}.section-heading h2{font-size:27px}.search-bar{width:100%;margin-top:18px}.merchant-grid{grid-template-columns:1fr}.merchant-cover{height:205px}.merchant-card-content{padding:17px}.merchant-card-content>p{min-height:0}.merchant-address{min-height:0}.merchant-footer{margin-top:10px}.dish-search-list{grid-template-columns:1fr}.why{grid-template-columns:1fr;gap:8px;margin:20px 0 36px}.why>div{padding:16px}.why b{margin:8px 0}.cta{padding:27px 24px;margin:20px 0 55px}.cta h2{font-size:29px}.cta>svg{display:none}.inner,.merchant-view{padding:28px 0 80px}.inner h1{font-size:37px}.merchant-hero{min-height:250px}.merchant-hero-info{padding:54px 21px 27px}.merchant-hero h1{font-size:33px}.merchant-hero-info>div:last-child{font-size:10px}.menu-heading{margin-top:27px}.product-grid{grid-template-columns:repeat(2,1fr);gap:10px}.product>img{height:125px}.product-text{padding:12px}.product h3{font-size:13px;min-height:34px}.product p{font-size:10px;min-height:39px}.product-bottom>strong{font-size:14px}.quantity{gap:4px}.quantity button{height:28px;width:28px}.two-columns{grid-template-columns:1fr}.panel{padding:18px}.cart-line{gap:7px;flex-wrap:wrap}.cart-line>img{width:50px;height:50px}.cart-line>b:last-child{font-size:11px}.stats{grid-template-columns:repeat(2,1fr);gap:9px}.stats>div{padding:14px}.stats strong{font-size:22px}.footer-grid{grid-template-columns:1fr 1fr;gap:20px}.footer-grid>div:first-child{grid-column:span 2}.sticky-cart{left:14px;right:14px;bottom:14px;justify-content:center}.toast{left:14px;right:14px;transform:none}.hero-actions{gap:12px}}
+
+/* Layout hardening: small screens, long names, safe areas */
+html,body,#root{min-width:0;max-width:100%}
+.app,.wrap,main,section,article,.panel,.merchant-card,.product{min-width:0}
+img{max-width:100%}
+.header-inner,.merchant-name,.product-bottom,.cart-line,.order-card,.admin-line{min-width:0}
+.merchant-name h3,.merchant-card-content p,.merchant-address,.product h3,.product p,.cart-line .flex-grow,.order-card p{overflow-wrap:anywhere}
+.two-columns>*,.merchant-grid>*,.product-grid>*,.footer-grid>*{min-width:0}
+input,textarea,select{max-width:100%}
+button{touch-action:manipulation}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #356fe0;outline-offset:2px}
+@media(max-width:600px){
+ .hero-metrics{flex-wrap:wrap}
+ .product-bottom{flex-wrap:wrap;gap:8px}
+ .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .merchant-grid,.two-columns,.dish-search-list{grid-template-columns:minmax(0,1fr)}
+ .merchant-footer{flex-wrap:wrap}
+ .cart-line .flex-grow{min-width:110px}
+ .cart-line>b:last-child{margin-left:auto}
+ .sticky-cart{bottom:max(14px,env(safe-area-inset-bottom))}
+ .toast{bottom:max(14px,env(safe-area-inset-bottom));max-width:calc(100vw - 28px)}
+ .modal{width:min(100%,450px);max-height:calc(100dvh - 30px);overflow:auto}
+ .cta{display:none}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
