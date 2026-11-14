@@ -106,3 +106,42 @@ select,option{color:#19263e;background:#fff;font-family:Manrope,Arial,sans-serif
 .detail-bottom .main-button{min-height:48px}
 @media(max-width:750px){.compact-menu{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.compact-product>img{height:145px}.compact-product-caption{padding:11px}.compact-product-caption h3{font-size:14px}.compact-product-caption span{font-size:11px}.detail-image{height:225px}.detail-content{padding:18px}.detail-bottom strong{font-size:23px}}
 @media(max-width:370px){.compact-product>img{height:120px}.detail-bottom{flex-wrap:wrap}.detail-bottom .main-button{width:100%;justify-content:center}}
+
+
+/* Ryadom brand refresh — navy / warm coral / clean food photography */
+:root{--ryadom-ink:#17283f;--ryadom-orange:#fa704c;--ryadom-paper:#f6f8fb}
+body,.app{background:var(--ryadom-paper)}
+.header{background:#fff}
+.brand{font-weight:800;letter-spacing:-1.8px}
+.brand-mark{position:relative;background:linear-gradient(145deg,#ff8c5f,#f35f3d);border-radius:13px;box-shadow:0 5px 14px #fa704c33;transform:rotate(-5deg)}
+.brand-mark>svg{transform:rotate(5deg);color:white;fill:none}
+.brand-mark-dot{position:absolute;width:5px;height:5px;background:#fff;border-radius:50%;left:18px;top:16px;pointer-events:none}
+.hero{background:#17283f;box-shadow:0 14px 42px #17283f0e}
+.main-button{background:#fa704c}
+.main-button:hover{background:#e75f3c}
+.merchant-grid{gap:14px}
+.merchant-card{border-radius:22px;box-shadow:0 6px 22px #14263c0b;border:1px solid #e9edf2}
+.merchant-cover{height:175px}
+.merchant-card-content{padding:17px}
+.merchant-card-content p{display:none}
+.merchant-name h3{font-size:21px;letter-spacing:-.5px}
+.merchant-address{font-size:12px}
+.merchant-footer{margin-top:13px;padding-top:13px}
+.merchant-footer>span:last-child{color:#ec6545;font-weight:800;display:flex;align-items:center;gap:4px}
+.compact-product{border-radius:19px}
+.compact-product>img{height:165px}
+.compact-product-caption span{color:#ec6545;font-weight:700}
+@media(max-width:750px){
+  .brand-mark{width:39px;height:39px}
+  .merchant-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+  .merchant-cover{height:132px}
+  .merchant-card-content{padding:12px}
+  .merchant-name h3{font-size:16px}
+  .merchant-category{font-size:10px}
+  .merchant-address{display:none}
+  .merchant-footer{margin-top:8px;padding-top:9px;flex-wrap:wrap;gap:5px}
+  .merchant-footer>span:first-child{font-size:10px}
+  .merchant-footer>span:last-child{font-size:11px}
+  .compact-product>img{height:145px}
+}
+@media(max-width:390px){.merchant-cover{height:115px}.merchant-name h3{font-size:15px}}
