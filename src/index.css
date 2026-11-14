@@ -151,3 +151,12 @@ body,.app{background:var(--ryadom-paper)}
 .product-price-row>b{font-size:19px;color:#17283f;font-weight:800;white-space:nowrap}
 .product-price-row>span{display:inline-flex;align-items:center;gap:3px}
 @media(max-width:750px){.product-price-row>b{font-size:17px}.compact-product-caption{padding:12px}.product-price-row>span{font-size:12px}}
+
+/* Quantity selector in the product details dialog */
+.detail-purchase{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.detail-purchase>small{font-size:13px;color:#7d8795}
+.detail-quantity{display:inline-flex;align-items:center;gap:12px;margin-top:8px}
+.detail-quantity button{min-width:42px;min-height:42px;display:inline-flex;align-items:center;justify-content:center}
+.detail-quantity button:disabled{opacity:.35;cursor:not-allowed}
+.detail-quantity b{min-width:24px;text-align:center;font-size:18px}
+@media(max-width:600px){.product-detail .detail-bottom{display:flex;flex-wrap:wrap;align-items:end;gap:14px}.product-detail .detail-bottom .main-button{flex:1;min-width:170px}}
