@@ -1,0 +1,11 @@
+import {readFileSync,existsSync} from 'node:fs';
+import assert from 'node:assert/strict';
+const html=readFileSync('dist/index.html','utf8');
+const css=html.match(/href="(\/-\/assets\/[^"\s]+\.css)"/);
+const js=html.match(/src="(\/-\/assets\/[^"\s]+\.js)"/);
+assert(css&&js,'GitHub Pages asset paths must start with /-/assets/');
+for(const asset of [css[1],js[1]])assert(existsSync('dist/'+asset.slice(3)),'Missing asset: '+asset);
+const styles=readFileSync('dist/'+css[1].slice(3),'utf8');
+for(const selector of ['.header{','.hero{','.profile-dropdown{','@media'])assert(styles.includes(selector),'Missing responsive styles: '+selector);
+assert(!styles.includes('@tailwind'),'Unprocessed Tailwind directives');
+console.log('PASS: published HTML references existing JS and compiled responsive CSS');
