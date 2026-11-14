@@ -102,10 +102,10 @@ export default function Portal({ section, onNavigate }: { section: 'account' | '
     setBusy(false);
   }
   return <section className="inner portal">
-    <div className="portal-title"><span className="eyebrow">{section === 'admin' ? 'АДМИНИСТРИРОВАНИЕ' : section === 'courier' ? 'ДОСТАВКА' : section === 'partner' ? 'ДЛЯ ЗАВЕДЕНИЙ' : 'ЛИЧНЫЙ КАБИНЕТ'}</span>
-      <h1>{section === 'admin' ? 'Управление платформой' : section === 'courier' ? 'Кабинет курьера' : section === 'partner' ? 'Кабинет заведения' : 'Ваш профиль'}</h1>
+    <div className="portal-title"><span className="eyebrow">{section === 'admin' ? 'ЛИЧНЫЙ ДОСТУП' : section === 'courier' ? 'ДОСТАВКА' : section === 'partner' ? 'ДЛЯ ЗАВЕДЕНИЙ' : 'ЛИЧНЫЙ КАБИНЕТ'}</span>
+      <h1>{section === 'admin' ? 'Кабинет владельца' : section === 'courier' ? 'Кабинет курьера' : section === 'partner' ? 'Кабинет заведения' : 'Ваш профиль'}</h1>
 </div>
-    <div className="portal-shortcuts"><button onClick={()=>onNavigate('workshop')}><ShieldCheck size={18}/> Центр управления заказами <ArrowRight size={16}/></button></div>
+    
     {!db ? <div className="panel portal-message"><LockKeyhole size={30}/><h3>Подключение сервера завершается</h3><p>Вход будет доступен после настройки защищённого подключения к базе данных. Временный вход без проверки прав отключён.</p></div>
     : loading ? <div className="panel">Загружаем профиль…</div>
     : passwordRecovery ? <div className="panel portal-auth"><h3>Новый пароль</h3><p>Придумайте новый пароль длиной не менее 10 символов.</p><form onSubmit={updatePassword}><label className="field">Новый пароль<input required type="password" minLength={10} value={password} onChange={e=>setPassword(e.target.value)} autoComplete="new-password"/></label><button className="main-button stretch" disabled={busy}>Сохранить пароль</button></form></div>
@@ -120,6 +120,7 @@ export default function Portal({ section, onNavigate }: { section: 'account' | '
       </div>
     : <div className="portal-content">
         <div className="panel portal-profile"><div><ShieldCheck size={22}/><span>{user.email}<small>{roles.map(r=>({customer:'Покупатель',merchant:'Владелец',courier:'Курьер',dispatcher:'Диспетчер',admin:'Администратор'}[r])).join(' · ')}</small></span></div><button className="outline-button" onClick={()=>void db.auth.signOut()}><LogOut size={16}/> Выйти</button></div>
+        {section === 'admin' && allowed && <div className="panel"><h3>Заказы и операции</h3><p>Проверка заказов, статусов и сообщений в отдельном рабочем центре.</p><button className="main-button" onClick={()=>onNavigate('workshop')}>Открыть центр заказов <ArrowRight size={17}/></button></div>}
         {!allowed && section === 'partner' ? <div className="panel portal-auth"><h3>Подключить заведение</h3><p>Заявка создаёт вашу точку, но не публикует её без проверки.</p><form onSubmit={applyMerchant}><label className="field">Название<input required minLength={2} maxLength={120} value={name} onChange={e=>setName(e.target.value)}/></label><label className="field">Адрес<input required minLength={5} maxLength={300} value={address} onChange={e=>setAddress(e.target.value)}/></label><button className="main-button stretch" disabled={busy}>Отправить заявку</button></form></div>
         : !allowed ? <div className="panel portal-message"><LockKeyhole size={28}/><h3>Нет доступа к разделу</h3><p>{section === 'courier' ? 'Доступ курьера выдаёт администратор после проверки.' : 'Эта панель доступна только сотрудникам с соответствующей ролью.'}</p></div>
         : <>
